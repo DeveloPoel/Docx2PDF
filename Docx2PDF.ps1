@@ -1,10 +1,10 @@
 #The docx2pdf script
 
-#Do the docx files need to be deleted after conversion?
+#Ask user if orignal doc(x) should be deleted.
 $shell = new-object -comobject "WScript.Shell"
 $resultyesno = $shell.popup("Delete docx file after conversion?",0,"Question",4+32)
 
-#select folder
+#Initiate window to select folder
 Add-Type -AssemblyName System.Windows.Forms
 $FolderBrowser = New-Object System.Windows.Forms.FolderBrowserDialog
 [void]$FolderBrowser.ShowDialog()
@@ -24,7 +24,8 @@ $word_app = New-Object -ComObject Word.Application
 
 # This filter will find .doc as well as .docx documents
 Get-ChildItem -Path $documents_path -Filter *.doc? -Recurse | ForEach-Object {
-    #Convert to PDF
+
+    #Convert doc(x) to PDF
     $document = $word_app.Documents.Open($_.FullName)
     $pdf_filename = "$($_.DirectoryName)\$($_.BaseName).pdf"
     $document.SaveAs([ref] $pdf_filename, [ref] 17)
